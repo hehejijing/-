@@ -1,6 +1,9 @@
 <template>
   <div id="app">
-    <router-view />
+    <!-- <router-view /> -->
+    <textindex />
+    <textindex2 />
+    <h1>{{}}</h1>
   </div>
 </template>
 

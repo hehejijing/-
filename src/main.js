@@ -9,6 +9,9 @@ import 'element-ui/lib/theme-chalk/index.css'
 import '@/styles/index.scss' // global css
 
 import App from './App'
+import components from '@/components'
+
+Vue.use(components)
 
 import store from './store'
 import router from './router'
