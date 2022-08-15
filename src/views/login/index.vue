@@ -29,7 +29,7 @@
         <span class="svg-container" @click="changePwd">
           <svg-icon :icon-class="passwordType === 'password' ? 'eye' : 'eye-open'" />
         </span></el-form-item>
-      <el-button type="primary" class="loginBtn" style="width:100%;margin-bottom:30px;" @click="login">Login</el-button>
+      <el-button :loading="loading" type="primary" class="loginBtn" style="width:100%;margin-bottom:30px;" @click="login">Login</el-button>
 
       <div class="tips">
         <span style="margin-right:20px;">账号: 13800000002</span>
@@ -52,6 +52,7 @@ export default {
       }
     }
     return {
+      loading: false,
       loginForm: {
         mobile: '13800000002',
         password: '123456'
@@ -80,8 +81,13 @@ export default {
     async login() {
       try {
         await this.$refs.loginForm.validate()
+        this.loading = true
+        await this.$store.dispatch('user/login', this.loginForm)
+        this.$router.push('/dashboard')
       } catch (e) {
         console.log(e)
+      } finally {
+        this.loading = false
       }
     }
   }
