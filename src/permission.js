@@ -10,10 +10,14 @@ import store from '@/store'
 
 const whiteList = ['/login', '/404'] // 定义白名单  所有不受权限控制的页面
 
-router.beforeEach((to, from, next) => {
+router.beforeEach(async(to, from, next) => {
   // 全局路由前置守卫
   if (store.getters.token) {
     // 如果有token 则视为已登录
+    if (!store.getters.userId) {
+      await store.dispatch('user/getUserInfo')
+    }
+
     if (to.path === '/login') {
       // 判断去往的页面是否为登录页
       next('/')
