@@ -4,7 +4,8 @@ export default {
   namespaced: true,
   state: {
     token: getToken(),
-    userInfo: {}
+    userInfo: {},
+    hrsaasTime: ''
   },
   mutations: {
     setToken(state, token) {
@@ -20,6 +21,9 @@ export default {
     },
     removeUserInfo(state) {
       state.userInfo = {}
+    },
+    setHrsaasTime(state, time) {
+      state.hrsaasTime = time
     }
   },
   actions: {
@@ -28,6 +32,7 @@ export default {
     async login({ commit }, data) {
       const res = await login(data)
       console.log(res)
+      commit('setHrsaasTime', +new Date())
       commit('setToken', res)
     },
     async getUserInfo({ commit }) {

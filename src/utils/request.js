@@ -1,7 +1,12 @@
+import router from '@/router'
 import store from '@/store'
 import axios from 'axios'
 import { Message } from 'element-ui'
 
+const timeout = 10
+function isCheckOut() {
+  return (Date.now() - store.getters.hrsaasTime) / 1000 > timeout
+}
 const service = axios.create({
   baseURL: process.env.VUE_APP_BASE_API, // url = base url + request url
   // withCredentials: true, // send cookies when cross-domain requests
@@ -13,6 +18,13 @@ service.interceptors.request.use(config => {
   // config.headers 加一个验证的字段
   // Authorization = Bearer + 空格 + token
   if (store.getters.token) {
+    if (isCheckOut()) {
+      console.log(isCheckOut())
+      store.dispatch('user/logout')
+      router.push('/login')
+      Message.error('接口超时')
+      return Promise.reject(new Error('接口超时'))
+    }
     config.headers['Authorization'] = `Bearer ${store.getters.token}`
   }
   return config
