@@ -42,6 +42,13 @@ service.interceptors.response.use((response) => {
     return Promise.reject(new Error(message))
   }
 }, (err) => {
+  if (err.response && err.response.data && err.response.data.code === 10002) {
+    // token 失效 不处于登录状态
+    store.dispatch('user/logout')
+    router.push('/login')
+  } else {
+    Message.error(err.messages || '')
+  }
   return Promise.reject(err)
 })
 
