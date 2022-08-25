@@ -1,21 +1,22 @@
-import textindex from './textindex'
-import textindex2 from './textindex2'
-import aa from './filters'
-const obj = { aa }
-const component = [textindex, textindex2]
+// 该文件负责所有的公共的组件的全局注册   Vue.use
+// Vue.use 这个方法 注册全局组件
+// import PageTools from './PageTools'
 // export default {
-//   install: (Vue) => {
-//     Vue.component('textindex', textindex)
-//     Vue.component('textindex2', textindex2)
+//   install(Vue) {
+//     //  注册全局的通用栏组件对象
+//     Vue.component('PageTools', PageTools)
 //   }
 // }
 
+// export default (Vue) => {
+//  Vue.component('PageTools', PageTools)
+// }
+
+// require.context(路径，是否查看子目录，正则) ==》返回一个函数
+const requireComponent = require.context('./', true, /\.vue$/)
+const res = requireComponent.keys().map(requireComponent)
 export default (Vue) => {
-  component.forEach((ele) => {
-    Vue.component(ele.name, ele)
-  })
-  // Vue.filter('aa', aa)
-  Object.keys(obj).forEach((key) => {
-    Vue.filter(key, obj[key])
+  res.forEach(ele => {
+    Vue.component(ele.default.name, ele.default)
   })
 }

@@ -9,20 +9,25 @@ import 'element-ui/lib/theme-chalk/index.css'
 import '@/styles/index.scss' // global css
 
 import App from './App'
-import components from '@/components'
-
-Vue.use(components)
+import Component from '@/components'
+Vue.use(Component) // 注册自己的插件
 
 import store from './store'
 import router from './router'
-
-import '@/icons' // icon
-import '@/permission' // permission control
-
 import * as directives from '@/directives'
+
+// 全局自定义指令
 Object.keys(directives).forEach(ele => {
   Vue.directive(ele, directives[ele])
 })
+
+import * as filters from '@/filters'
+Object.keys(filters).forEach(ele => {
+  Vue.filter(ele, filters[ele])
+})
+
+import '@/icons' // icon
+import '@/permission' // permission control
 
 Vue.use(ElementUI)
 
