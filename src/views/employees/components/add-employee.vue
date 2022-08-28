@@ -1,7 +1,7 @@
 <template>
   <el-dialog title="新增员工" :visible="visibleDialog" :before-close="handleClose">
     <!-- 表单 -->
-    <el-form label-width="120px" :model="formData" :rules="rules">
+    <el-form ref="addEmployeeDialog" label-width="120px" :model="formData" :rules="rules">
       <el-form-item label="姓名" prop="username">
         <el-input v-model="formData.username" style="width:80%" placeholder="请输入姓名" />
       </el-form-item>
@@ -17,7 +17,7 @@
         </el-select>
       </el-form-item>
       <el-form-item label="工号" prop="workOfEmployment">
-        <el-input v-model="formData.workOfEmployment" style="width:80%" placeholder="请输入工号" />
+        <el-input v-model="formData.workNumber" style="width:80%" placeholder="请输入工号" />
       </el-form-item>
       <el-form-item label="部门" prop="departmentName">
         <el-input v-model="formData.departmentName" style="width:80%" placeholder="请选择部门" @focus="getDepartments" />
@@ -38,8 +38,8 @@
     <template v-slot:footer>
       <el-row type="flex" justify="center">
         <el-col :span="6">
-          <el-button size="small">取消</el-button>
-          <el-button type="primary" size="small">确定</el-button>
+          <el-button size="small" @click="handleClose">取消</el-button>
+          <el-button v-loading="loadingBtn" type="primary" size="small" @click="submitEmploy">确定</el-button>
         </el-col>
       </el-row>
     </template>
@@ -50,6 +50,7 @@
 import EmployeeEnum from '@/api/constant/employees'
 import { getDepartments } from '@/api/departments'
 import { transListToTreeData } from '@/utils'
+import { addEmployee } from '@/api/employees'
 export default {
   props: {
     visibleDialog: {
@@ -64,6 +65,7 @@ export default {
       treeData: [], // 定义数组接收树形数据
       showTree: false, // 控制树形的显示或者隐藏
       loading: false, // 控制树的显示或者隐藏进度条
+      loadingBtn: false, // 控制提交时按钮
       formData: {
         username: '',
         mobile: '',
@@ -93,6 +95,8 @@ export default {
   methods: {
     handleClose() {
       this.$emit('update:visibleDialog', false)
+      this.showTree = false
+      this.$refs.addEmployeeDialog.resetFields() // resetFields() 表单的方法 作用是清除校验结果
       this.formData = {
         username: '',
         mobile: '',
@@ -102,7 +106,6 @@ export default {
         timeOfEntry: '',
         correctionTime: ''
       }
-      this.$refs.addEmployeeForm.resetFields() // 对整个表单结果进行校验
     },
     async getDepartments() {
       this.treeData = depts
@@ -115,6 +118,20 @@ export default {
     selectNode(node) {
       this.formData.departmentName = node.name
       this.showTree = false
+    },
+    async submitEmploy() {
+      try {
+        this.$refs.addEmployeeDialog.validate()
+        this.loadingBtn = true
+        await addEmployee(this.formData)
+        this.$emit('refresh')
+        this.$message.success('新增成功')
+        this.handleClose()
+      } catch (e) {
+        console.log(e)
+      } finally {
+        this.loadingBtn = false
+      }
     }
 
   }

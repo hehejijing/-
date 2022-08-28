@@ -1,7 +1,14 @@
 <template>
   <div class="dashboard-container">
     <div class="dashboard-text">name: {{ name }}</div>
+    <UploadExcel :before-upload="beforeUpload" :on-success="success" />
+    <!-- <a
+      href="http://localhost:9527/static/img/33.b4944168.jpg"
+      download="33.b4944168.jpg"
+    >点击
+    </a> -->
   </div>
+
 </template>
 
 <script>
@@ -33,6 +40,30 @@ export default {
     ...mapGetters([
       'name'
     ])
+  },
+  // mounted() {
+  //   import('@/vendor/Export2Excel').then(excel => {
+  //     excel.export_json_to_excel({
+  //       header: ['姓名', '手机号', '入职日期', '聘用形式'], // 表头 必填  ['姓名', '手机号', '入职日期', '聘用形式']
+  //       data: [['张三', '12312', '123', '1'],
+  //         ['我爱一条柴', '12332', '123', '1']], // 具体数据 必填 [['张三', '13399999', '2020-2020-2020', '正式']]
+  //       filename: 'excel-list', // 非必填
+  //       autoWidth: true, // 非必填
+  //       bookType: 'xlsx' // 非必填
+  //     })
+  //   })
+  // },
+  methods: {
+    beforeUpload(file) {
+      // if (file.size > 1024) {
+      //   this.$message.error('文件大小不能超过1MB')
+      //   return false
+      // }
+      return true
+    },
+    success(data) {
+      console.log(data)
+    }
   }
 
 }
