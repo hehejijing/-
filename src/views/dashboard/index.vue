@@ -2,6 +2,7 @@
   <div class="dashboard-container">
     <div class="dashboard-text">name: {{ name }}</div>
     <UploadExcel :before-upload="beforeUpload" :on-success="success" />
+    <UploadImg @onSuccess="handleSuccess" />
     <!-- <a
       href="http://localhost:9527/static/img/33.b4944168.jpg"
       download="33.b4944168.jpg"
@@ -59,10 +60,23 @@ export default {
       //   this.$message.error('文件大小不能超过1MB')
       //   return false
       // }
+      // 一般分两种情况
+      // 自定义 完全 ==》所有的逻辑取决于 自定义， 自定义和默认是相互排斥的
+      // if (this.beforeUploadCheck) {
+      //   return this.beforeUploadCheck(file)
+      // }
       return true
+
+      // 自定义 完全 ==》所有的逻辑取决于 先自定义 再默认， 自定义和默认是不相互排斥的
+      // if (this.beforeUploadCheck && !this.beforeUploadCheck(file)) {
+      //   return false
+      // }
     },
     success(data) {
       console.log(data)
+    },
+    handleSuccess({ url }) {
+      console.log(url)
     }
   }
 

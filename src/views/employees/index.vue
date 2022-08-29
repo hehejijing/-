@@ -13,6 +13,18 @@
       <el-table border :data="list">
         <el-table-column label="序号" sortable="" width="80" type="index" />
         <el-table-column label="姓名" prop="username" />
+        <el-table-column label="头像">
+          <template slot-scope="{row}">
+            <img
+              v-imgerror="require('@/assets/common/bigUserHeader.png')"
+              :src="row.staffPhoto"
+              alt=""
+              style="border-radius:50%; width:100px; height:100px; padding:10px"
+              @click="showErcodeDialog(row.staffPhoto)"
+            >
+          </template>
+        </el-table-column>
+
         <el-table-column label="工号" prop="workNumber" />
         <el-table-column label="聘用形式" prop="formOfEmployment" :formatter="formatterFn" />
         <el-table-column label="部门" prop="departmentName" />
@@ -28,7 +40,7 @@
         </el-table-column>
         <el-table-column label="操作" fixed="right" width="280">
           <template slot-scope="{row}">
-            <el-button type="text" size="small">查看</el-button>
+            <el-button type="text" size="small" @click="$router.push(`/employees/detail/${row.id}`)">查看</el-button>
             <el-button type="text" size="small">转正</el-button>
             <el-button type="text" size="small">调岗</el-button>
             <el-button type="text" size="small">离职</el-button>
@@ -52,6 +64,9 @@
       </el-row>
     </el-card>
     <addEmployee :visible-dialog.sync="visibleDialog" @refresh="getEmployeeList" />
+    <el-dialog title="头像二维码" :visible.sync="ercodeDialog" custom-class="canvaseq">
+      <canvas id="canvas" />
+    </el-dialog>
   </div>
 </template>
 <script>
@@ -59,6 +74,7 @@ import { getEmployeeList, delEmployee } from '@/api/employees'
 import EmployeeEnum from '@/api/constant/employees'
 import addEmployee from './components/add-employee.vue'
 import { formatDate } from '@/filters'
+import QrCode from 'qrcode'
 export default {
   components: {
     addEmployee
@@ -72,13 +88,21 @@ export default {
         size: 10
       },
       total: 0, // 总数
-      visibleDialog: false
+      visibleDialog: false,
+      ercodeDialog: false
     }
   },
   created() {
     this.getEmployeeList()
   },
   methods: {
+    async showErcodeDialog(staffPhoto) {
+      if (!staffPhoto) return this.$message.error('无头像')
+      this.ercodeDialog = true
+      await this.$nextTick()
+      const dom = document.querySelector('#canvas')
+      QrCode.toCanvas(dom, staffPhoto)
+    },
     async getEmployeeList() {
       try {
         const { rows, total } = await getEmployeeList(this.page)
@@ -172,3 +196,8 @@ export default {
   }
 }
 </script>
+<style lang="scss">
+.canvaseq .el-dialog__body {
+  text-align: center;
+}
+</style>

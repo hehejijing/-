@@ -21,6 +21,9 @@ Object.keys(directives).forEach(ele => {
   Vue.directive(ele, directives[ele])
 })
 
+import Print from 'vue-print-nb'
+Vue.use(Print)
+
 import * as filters from '@/filters'
 Object.keys(filters).forEach(ele => {
   Vue.filter(ele, filters[ele])

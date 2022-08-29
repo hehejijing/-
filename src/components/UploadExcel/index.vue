@@ -22,6 +22,7 @@ export default {
     beforeUpload: Function, // eslint-disable-line
     onSuccess: Function// eslint-disable-line
   },
+
   data() {
     return {
       loading: false,
