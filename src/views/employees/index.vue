@@ -44,7 +44,7 @@
             <el-button type="text" size="small">转正</el-button>
             <el-button type="text" size="small">调岗</el-button>
             <el-button type="text" size="small">离职</el-button>
-            <el-button type="text" size="small">角色</el-button>
+            <el-button type="text" size="small" @click="asRole(row.id)">角色</el-button>
             <el-button type="text" size="small" @click="del(row.id)">删除</el-button>
           </template>
         </el-table-column>
@@ -67,6 +67,7 @@
     <el-dialog title="头像二维码" :visible.sync="ercodeDialog" custom-class="canvaseq">
       <canvas id="canvas" />
     </el-dialog>
+    <assignRole ref="assignRole" v-model="assignRoleShow" :user-id="currentUserId" />
   </div>
 </template>
 <script>
@@ -75,9 +76,11 @@ import EmployeeEnum from '@/api/constant/employees'
 import addEmployee from './components/add-employee.vue'
 import { formatDate } from '@/filters'
 import QrCode from 'qrcode'
+import assignRole from './components/assign-role.vue'
 export default {
   components: {
-    addEmployee
+    addEmployee,
+    assignRole
   },
   data() {
     return {
@@ -89,7 +92,9 @@ export default {
       },
       total: 0, // 总数
       visibleDialog: false,
-      ercodeDialog: false
+      ercodeDialog: false,
+      assignRoleShow: false,
+      currentUserId: ''
     }
   },
   created() {
@@ -192,6 +197,11 @@ export default {
         })
       })
       return result
+    },
+    async asRole(id) {
+      this.currentUserId = id
+      await this.$refs.assignRole.getRoleList()
+      this.assignRoleShow = true
     }
   }
 }
