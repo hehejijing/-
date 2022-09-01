@@ -15,7 +15,10 @@ router.beforeEach(async(to, from, next) => {
   if (store.getters.token) {
     // 如果有token 则视为已登录
     if (!store.getters.userId) {
-      await store.dispatch('user/getUserInfo')
+      const { roles: { menus }} = await store.dispatch('user/getUserInfo')
+      // console.log(res)
+      store.dispatch('permission/filterRoutes', menus)
+      next(to.path)
     }
 
     if (to.path === '/login') {

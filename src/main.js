@@ -24,6 +24,8 @@ Object.keys(directives).forEach(ele => {
 import Print from 'vue-print-nb'
 Vue.use(Print)
 
+import myMixin from '@/mixin/checkPermission'
+
 import * as filters from '@/filters'
 Object.keys(filters).forEach(ele => {
   Vue.filter(ele, filters[ele])
@@ -33,7 +35,7 @@ import '@/icons' // icon
 import '@/permission' // permission control
 
 Vue.use(ElementUI)
-
+Vue.mixin(myMixin)
 Vue.config.productionTip = false
 
 new Vue({

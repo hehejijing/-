@@ -4,6 +4,7 @@ export default {
   // 路由规则
   path: '/setting', // 路由地址
   component: Layout,
+  meta: { id: 'settings' },
   children: [{
     name: 'setting', // 给模块的一级路由加一个name属性
 

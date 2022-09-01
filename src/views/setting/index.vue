@@ -28,7 +28,7 @@
             width="320"
           >
             <template slot-scope="scope">
-              <el-button type="success" size="small">分配权限</el-button>
+              <el-button type="success" size="small" @click="assign(scope.row)">分配权限</el-button>
               <el-button type="primary" size="small" @click="edit(scope.row)">编辑</el-button>
               <el-button type="danger" size="small" @click="del(scope.row.id)">删除</el-button>
             </template>
@@ -72,6 +72,7 @@
 
     <!-- .sync 拆分成dialogVsible属性和update:dialogVisible事件
     <roleDialog :dialog-visible="dialogVisible" <template/@update:dialogVisible="接受子组件传递过来的值 改变dialogVisible的值" /> -->
+    <managerPermission ref="managerPermission" :dialog-manager-permission.sync="dialogManagerPermission" />
 
   </div>
 </template>
@@ -79,10 +80,12 @@
 <script>
 import { getRoleList, deleteRole } from '@/api/setting'
 import roleDialog from './components/roleDialog.vue'
+import managerPermission from './components/manager-permission.vue'
 export default {
   name: 'Hrsaas1Index',
   components: {
-    roleDialog
+    roleDialog,
+    managerPermission
   },
 
   data() {
@@ -95,7 +98,8 @@ export default {
       list: [],
       total: 0,
       loading: false,
-      dialogVisible: false
+      dialogVisible: false,
+      dialogManagerPermission: false
     }
   },
 
@@ -137,6 +141,10 @@ export default {
       } catch (e) {
         console.log(e)
       }
+    },
+    async assign(row) {
+      await this.$refs.managerPermission.getPermissionList(row.id)
+      this.dialogManagerPermission = true
     }
   }
 }

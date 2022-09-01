@@ -4,6 +4,7 @@ export default {
   // 路由规则
   path: '/social', // 路由地址
   component: Layout,
+  meta: { id: 'social_securitys' },
   children: [{
     name: 'social', // 给模块的一级路由加一个name属性
 
