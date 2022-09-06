@@ -8,6 +8,8 @@
     <!-- <breadcrumb class="breadcrumb-container" /> -->
 
     <div class="right-menu">
+      <Lang style="margin-right: 10px" />
+      <ScreenFull class="right-menu-item" />
       <el-dropdown class="avatar-container" trigger="click">
         <div class="avatar-wrapper">
           <img
@@ -28,6 +30,7 @@
         </el-dropdown-menu>
       </el-dropdown>
     </div>
+
   </div>
 </template>
 
@@ -35,10 +38,12 @@
 import { mapGetters } from 'vuex'
 import Hamburger from '@/components/Hamburger'
 import defaultImg from '@/assets/common/head.jpg'
+import Lang from '@/components/lang'
 
 export default {
   components: {
-    Hamburger
+    Hamburger,
+    Lang
   },
   data() {
     return {
@@ -94,6 +99,7 @@ export default {
   }
 
   .right-menu {
+    display: flex;
     float: right;
     height: 100%;
     line-height: 50px;
