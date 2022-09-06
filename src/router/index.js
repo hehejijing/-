@@ -82,9 +82,21 @@ export const constantRoutes = [
 ]
 
 const createRouter = () => new Router({
-  // mode: 'history', // require service support
-  scrollBehavior: () => ({ y: 0 }),
-  routes: [...constantRoutes]
+  mode: 'history', // require service support
+  scrollBehavior: (to, from, savePosition) => {
+    console.log(savePosition)
+    if (savePosition) {
+      return savePosition
+    } else {
+      return { y: 0 }
+    }
+    // console.log(to)
+    // if (to.path === '/dashboard') {
+    //   return { y: 100 }
+    // }
+  },
+  routes: [...constantRoutes],
+  base: '/woaiyitiaochai/'
 })
 
 const router = createRouter()
